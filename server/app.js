@@ -24,28 +24,22 @@ module.exports = function(sock) {
             db: 'twi',
             url: 'mongodb://admin:pwd@localhost:27017/twi/sessions'
         }),
-        cookie: { secure: true }
+        cookie: {
+            proxy: true,
+            secure: true
+        }
     }));
     app.use(passport.initialize());
     app.use(passport.session());
 
     app.get('/', function(req, res) {
-        if(!!req.user) {
-            page='Привет, ' + (req.user && req.user.username) + '!<br><br>';
-            page+='<a href="/get?user='+/*req.user.id+*/'">Мои твиты</a><br>';
-            page+='<a href="/users">Пользователи</a>';
-            page+='<form action="/post"><input type="text" name="tweet" maxlength=140><br><input type="submit"></form>'
-        }
-        else {
-            page='Пожалуйста, войдите в свой <a href="">Яндекс&ndash;аккаунт</a>.<br><br>';
-            page+='<a href="/users">Пользователи</a>';
-        }
-        res.send(page);
+
+        res.send('hello ' + (req.user && req.user.username));
+
     });
 
-    app.get('/get', db.getTweets);
-    app.get('/post', db.postTweet);
-    app.get('/users', db.getUsers);
+    app.get('/get/', db.get);
+    app.get('/post/', db.post);
 
     app.get('/auth/', passport.authenticate('yandex'), auth.auth);
     app.get('/auth/yandex/callback', passport.authenticate('yandex', { failureRedirect: '/login' }), auth.callback);
