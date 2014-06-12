@@ -22,7 +22,8 @@ module.exports = {
 	},
 	postTweet: function(tweet, user)
 	{
-		db_tweets.insert({content: tweet, user: user}, function(err, records) {});
+		console.log(tweet, user);
+		db_tweets.insert({content: tweet, user: user.toString()}, function(err, records) { console.log(records); });
 	},
 	getTweet: function(id, clb)
 	{

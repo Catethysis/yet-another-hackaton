@@ -30,13 +30,16 @@ module.exports = function(sock) {
     app.use(passport.session());
 
     app.get('/', function(req, res) {
-
-        res.send('hello ' + (req.user && req.user.username));
-
+        page='Hello, ' + (req.user && req.user.username) + '!<br><br>';
+        page+='<a href="/get?user='+/*req.user.id+*/'">My tweets</a><br>';
+        page+='<a href="/users">Users</a>';
+        page+='<form action="/post"><input type="text" name="tweet" maxlength=140><br><input type="submit"></form>'
+        res.send(page);
     });
 
-    app.get('/get/', db.getTweets);
-    app.get('/post/', db.postTweet);
+    app.get('/get', db.getTweets);
+    app.get('/post', db.postTweet);
+    app.get('/users', db.getUsers);
 
     app.get('/auth/', passport.authenticate('yandex'), auth.auth);
     app.get('/auth/yandex/callback', passport.authenticate('yandex', { failureRedirect: '/login' }), auth.callback);
