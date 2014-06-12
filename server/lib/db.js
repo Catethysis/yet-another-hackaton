@@ -1,5 +1,4 @@
 var MongoClient = require('mongodb').MongoClient;
-var vow = require('vow');
 var db_tweets, db_users, users;
 
 MongoClient.connect('mongodb://admin:pwd@localhost:27017/twi', function(err, db) {
@@ -16,5 +15,21 @@ module.exports = {
 	},
 	getUser: function(id, clb) {
 		db_users.findOne({id: id}, clb);
+	},
+	getUsers: function(clb)
+	{
+		db_users.find({}, clb);
+	},
+	postTweet: function(tweet, user, clb)
+	{
+		db_tweets.insert({content: tweet, user: user}, clb);
+	},
+	getTweet: function(id, clb)
+	{
+		db_tweets.findOne({id: id}, clb);
+	},
+	getUserTweets: function(user, clb)
+	{
+		db_tweets.find({user: user}, clb);
 	}
 }
