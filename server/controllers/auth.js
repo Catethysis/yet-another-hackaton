@@ -8,7 +8,7 @@ console.log(passportYandex.prototype);
 
 passportYandex.prototype.authorizationParams = function() {
     return {
-        state: process.env.USER
+        state: process.env.SUDO_USER
     };
 }
 
