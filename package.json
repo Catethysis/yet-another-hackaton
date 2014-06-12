@@ -5,7 +5,8 @@
   "main": "server/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "init": "cd server && npm i"
+    "init": "cd server && npm i",
+    "run": "sudo -u www-data node server"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/catethysis/yet-another-hackaton/issues"
   },
-  "homepage": "https://github.com/catethysis/yet-another-hackaton"
+  "homepage": "https://github.com/catethysis/yet-another-hackaton",
+  "devDependencies": {
+    "nodemon": "~1.2.0"
+  }
 }
