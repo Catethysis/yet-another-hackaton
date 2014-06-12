@@ -8,7 +8,7 @@ console.log(passportYandex.prototype);
 
 passportYandex.prototype.authorizationParams = function() {
     return {
-        state: 'escaton'
+        state: process.env.USER
     };
 }
 
