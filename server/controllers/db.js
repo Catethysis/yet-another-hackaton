@@ -1,37 +1,25 @@
-var mongoose = require('mongoose');
-
-db = mongoose.createConnection('mongodb://admin:pwd@localhost:27017/twi');
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", function callback () {
-    console.log("Connected to DB")
-});
-
-var TweetSchema = new mongoose.Schema( {
-    text: { type: String, default: "tweet" },
-    user: { type: Number }
-} );
-
-var UserSchema = new mongoose.Schema( {
-    text: { type: String, default: "tweet" },
-    user: { type: Number }
-} );
-
-var par;
+var db = require('../lib/db');
 
 module.exports = {
-
-    get: function(req, res) {
-    	
-        res.send('get par='+par);
-
+    getTweets: function(req, res) {
+        user_id=req.query.user.split('/')[0];
+        db.getUser(user_id, function(err, user)
+        {
+            page=user.profile.displayName+' &mdash; '+user.profile.name.familyName+'&nbsp;'+user.profile.name.givenName;
+            db.getUserTweets(user_id, function(err, cursor) {
+                cursor.toArray(function(err, arr) {
+                    arr.forEach(function(item) {
+                        page+='<br>'+item.content;
+                    })
+                    res.send(page);
+                })
+            })
+        });
     },
 
-
-    post: function(req, res) {
+    postTweet: function(req, res) {
     	par=req.query.s;
         res.send('set par='+par)
-
+        //db.postTweet('Hello2', req.query.user.split('/')[0]);
     }
-
-
-}
+};

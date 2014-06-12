@@ -13,16 +13,16 @@ module.exports = {
 	upsertUser: function(id, profile, clb) {
 		db_users.update({id: id}, {$set: {profile: profile}}, {upsert: true}, clb);
 	},
-	getUser: function(id, clb) {
-		db_users.findOne({id: id}, clb);
+	getUser: function(user, clb) {
+		db_users.findOne({id: user}, clb);
 	},
 	getUsers: function(clb)
 	{
 		db_users.find({}, clb);
 	},
-	postTweet: function(tweet, user, clb)
+	postTweet: function(tweet, user)
 	{
-		db_tweets.insert({content: tweet, user: user}, clb);
+		db_tweets.insert({content: tweet, user: user}, function(err, records) {});
 	},
 	getTweet: function(id, clb)
 	{
@@ -30,6 +30,7 @@ module.exports = {
 	},
 	getUserTweets: function(user, clb)
 	{
+		console.log(user);
 		db_tweets.find({user: user}, clb);
 	}
 }

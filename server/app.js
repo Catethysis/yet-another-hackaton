@@ -35,8 +35,8 @@ module.exports = function(sock) {
 
     });
 
-    app.get('/get/', db.get);
-    app.get('/post/', db.post);
+    app.get('/get/', db.getTweets);
+    app.get('/post/', db.postTweet);
 
     app.get('/auth/', passport.authenticate('yandex'), auth.auth);
     app.get('/auth/yandex/callback', passport.authenticate('yandex', { failureRedirect: '/login' }), auth.callback);
