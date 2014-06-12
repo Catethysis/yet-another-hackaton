@@ -36,7 +36,7 @@ module.exports = {
     },
 
     postTweet: function(req, res) {
-        db.postTweet(req.query.tweet, 22908491);
+        db.postTweet(req.query.tweet, req.user.id);
         res.redirect('/');
     	/*par=req.query.s;
         res.send('set par='+par)*/
