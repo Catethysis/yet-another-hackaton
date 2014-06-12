@@ -10,6 +10,8 @@ app.get('/', function(req, res) {
 });
 
 var sock = path.join(__dirname, 'run', 'index.sock');
-fs.unlinkSync(sock);
+if (fs.existsSync(sock)) {
+    fs.unlinkSync(sock);
+}
 console.log(sock);
 app.listen(sock);
