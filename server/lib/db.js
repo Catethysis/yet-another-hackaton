@@ -22,7 +22,6 @@ module.exports = {
 	},
 	postTweet: function(tweet, user)
 	{
-		console.log(tweet, user);
 		db_tweets.insert({content: tweet, user: user.toString()}, function(err, records) { console.log(records); });
 	},
 	getTweet: function(id, clb)
@@ -31,7 +30,6 @@ module.exports = {
 	},
 	getUserTweets: function(user, clb)
 	{
-		console.log(user);
 		db_tweets.find({user: user}, clb);
 	}
 }

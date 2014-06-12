@@ -30,10 +30,16 @@ module.exports = function(sock) {
     app.use(passport.session());
 
     app.get('/', function(req, res) {
-        page='Hello, ' + (req.user && req.user.username) + '!<br><br>';
-        page+='<a href="/get?user='+/*req.user.id+*/'">My tweets</a><br>';
-        page+='<a href="/users">Users</a>';
-        page+='<form action="/post"><input type="text" name="tweet" maxlength=140><br><input type="submit"></form>'
+        if(!!req.user) {
+            page='Привет, ' + (req.user && req.user.username) + '!<br><br>';
+            page+='<a href="/get?user='+/*req.user.id+*/'">Мои твиты</a><br>';
+            page+='<a href="/users">Пользователи</a>';
+            page+='<form action="/post"><input type="text" name="tweet" maxlength=140><br><input type="submit"></form>'
+        }
+        else {
+            page='Пожалуйста, войдите в свой <a href="">Яндекс&ndash;аккаунт</a>.<br><br>';
+            page+='<a href="/users">Пользователи</a>';
+        }
         res.send(page);
     });
 

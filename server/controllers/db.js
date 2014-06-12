@@ -6,12 +6,14 @@ module.exports = {
         user_id=req.query.user.split('/')[0];
         db.getUser(user_id, function(err, user)
         {
-            page=user.profile.displayName+' ('+user.profile.name.familyName+'&nbsp;'+user.profile.name.givenName+') posted:<br>';
+            page='<a href="/">Глагне</a><br><br>';
+            page+=user.profile.displayName+' ('+user.profile.name.familyName+'&nbsp;'+user.profile.name.givenName+') написал:<br><ul>';
             db.getUserTweets(user_id, function(err, cursor) {
                 cursor.toArray(function(err, arr) {
                     arr.forEach(function(item) {
-                        page+='<br>'+item.content;
+                        page+='<li>'+item.content+'</li>';
                     })
+                    page+='</ul>';
                     res.send(page);
                 })
             })
@@ -22,10 +24,12 @@ module.exports = {
         db.getUsers(function(err, cursor)
         {
             cursor.toArray(function(err, arr) {
-                page='';
+                page='<a href="/">Глагне</a><br><ul>';
                 arr.forEach(function(user) {
-                    page+="<a href = /get/?user="+user.id+">"+user.profile.displayName+' &mdash; '+user.profile.name.familyName+'&nbsp;'+user.profile.name.givenName+'</a><br>';
+                    page+="<li><a href = /get/?user="+user.id+">"+user.profile.displayName+' &mdash; '+user.profile.name.familyName+'&nbsp;'+
+                        user.profile.name.givenName+'</a></li><br>';
                 });
+                page+='</ul>'
                 res.send(page);
             });
         });
