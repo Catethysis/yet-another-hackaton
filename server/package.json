@@ -11,8 +11,11 @@
   "dependencies": {
     "express": "~4.4.3",
     "mongodb": "~1.4.6",
-    "vow": "~0.3.13"
-  },
-  "devDependencies": {
+    "vow": "~0.3.13",
+    "passport": "~0.2.0",
+    "passport-yandex": "0.0.2",
+    "cookie-parser": "~1.1.0",
+    "express-session": "~1.2.1",
+    "connect-mongo": "~0.4.1"
   }
 }
