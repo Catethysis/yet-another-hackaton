@@ -33,13 +33,22 @@ module.exports = function(sock) {
     app.use(passport.session());
 
     app.get('/', function(req, res) {
-
-        res.send('hello ' + (req.user && req.user.username));
-
+        if(!!req.user) {
+            page='Привет, ' + (req.user && req.user.username) + '!<br><br>';
+            page+='<a href="/get?user='+/*req.user.id+*/'">Мои твиты</a><br>';
+            page+='<a href="/users">Пользователи</a>';
+            page+='<form action="/post"><input type="text" name="tweet" maxlength=140><br><input type="submit"></form>'
+        }
+        else {
+            page='Пожалуйста, войдите в свой <a href="">Яндекс&ndash;аккаунт</a>.<br><br>';
+            page+='<a href="/users">Пользователи</a>';
+        }
+        res.send(page);
     });
 
-    app.get('/get/', db.get);
-    app.get('/post/', db.post);
+    app.get('/get', db.getTweets);
+    app.get('/post', db.postTweet);
+    app.get('/users', db.getUsers);
 
     app.get('/auth/', passport.authenticate('yandex'), auth.auth);
     app.get('/auth/yandex/callback', passport.authenticate('yandex', { failureRedirect: '/login' }), auth.callback);
