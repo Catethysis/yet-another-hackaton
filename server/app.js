@@ -19,14 +19,11 @@ module.exports = function(sock) {
     // app.use(express.bodyParser());
     app.use(session({
         secret: 'twi',
-        secureProxy: true,
+        proxy: true,
         store: new MongoStore({
             db: 'twi',
             url: 'mongodb://admin:pwd@localhost:27017/twi/sessions'
-        }),
-        cookie: {
-            secure: true
-        }
+        })
     }));
     app.use(passport.initialize());
     app.use(passport.session());

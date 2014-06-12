@@ -15,8 +15,7 @@ passportYandex.prototype.authorizationParams = function() {
 passport.use(new passportYandex({
         clientID: 'a55d6e3ea4d64578bb931fba21b84160',
         clientSecret: '49664a3c890d4d46b4bd5376375f5fde',
-        callbackURL: "http://callback.twi.dev/",
-        state: "escaton"
+        callbackURL: "http://callback.twi.dev/"
     },
     function(accessToken, refreshToken, profile, done) {
 
