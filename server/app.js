@@ -3,7 +3,10 @@ var express = require('express'),
     db = require('./controllers/db'),
     session = require('express-session'),
     MongoStore = require('connect-mongo')(session),
-    auth = require('./controllers/auth');
+    auth = require('./controllers/auth'),
+    busboy = require('connect-busboy');
+
+app.use(busboy());
 
 var passport = auth.passport;
 
@@ -30,10 +33,14 @@ module.exports = function(sock) {
 
     app.get('/', function(req, res) {
         if(!!req.user) {
-            page='Привет, ' + (req.user && req.user.username) + '!<br><br>';
+            page ='Привет, ' + (req.user && req.user.username) + '!<br><br>';
             page+='<a href="/get?user='+req.user.id+'">Мои твиты</a><br>';
             page+='<a href="/users">Пользователи</a>';
-            page+='<form action="/post"><input type="text" name="tweet" maxlength=140><br><input type="submit"></form>'
+            page+='<form action="/post/" enctype="multipart/form-data" method="post">';
+            page+='<br>Твит<br><input type="text" name="tweet" maxlength=140><br>';
+            page+='приклеить картинку<br><input type="file" name="приклеить картинку" multiple="multiple"><br>';
+            page+='<input type="submit">';
+            page+='</form>';
         }
         else {
             page='Пожалуйста, войдите в свой <a href="/auth">Яндекс&ndash;аккаунт</a>.<br><br>';
@@ -43,7 +50,7 @@ module.exports = function(sock) {
     });
 
     app.get('/get', db.getTweets);
-    app.get('/post', db.postTweet);
+    app.post('/post', db.postTweet);
     app.get('/users', db.getUsers);
 
     app.get('/auth/', passport.authenticate('yandex'), auth.auth);
@@ -51,5 +58,4 @@ module.exports = function(sock) {
 
     app.listen(sock);
     console.log('start listening socket: ', sock);
-
 }

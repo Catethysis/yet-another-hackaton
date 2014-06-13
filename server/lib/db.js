@@ -20,9 +20,9 @@ module.exports = {
 	{
 		db_users.find({}, clb);
 	},
-	postTweet: function(tweet, user)
+	postTweet: function(tweet)
 	{
-		db_tweets.insert({content: tweet, user: user.toString()}, function(err, records) { console.log(records); });
+		db_tweets.insert({content: tweet.text, user: tweet.user.toString(), attach: tweet.attachUID}, function(err, records) { console.log(records); });
 	},
 	getTweet: function(id, clb)
 	{

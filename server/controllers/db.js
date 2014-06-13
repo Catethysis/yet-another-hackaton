@@ -1,7 +1,9 @@
-var db = require('../lib/db');
+var db = require('../lib/db'),
+    busboy = require('connect-busboy'),
+    fs = require('fs'),
+    uuid = require('node-uuid');
 
 module.exports = {
-
     getTweets: function(req, res) {
         user_id=req.query.user.split('/')[0];
         db.getUser(user_id, function(err, user)
@@ -36,10 +38,25 @@ module.exports = {
     },
 
     postTweet: function(req, res) {
-        db.postTweet(req.query.tweet, req.user.id);
-        res.redirect('/');
-    	/*par=req.query.s;
-        res.send('set par='+par)*/
-        //db.postTweet('Hello2', req.query.user.split('/')[0]);
+        var tweet={};
+        req.pipe(req.busboy);
+        req.busboy.on('field', function(key, value) {
+            tweet.text=value;
+            tweet.user=req.user.id;
+        });
+        req.busboy.on('file', function (fieldname, file, filename) {
+            extension=filename.split('.');
+            extension=extension[extension.length-1];
+            uid=uuid.v4()+'.'+extension; //имя файла в хранилище и для базы
+            var fstream = fs.createWriteStream('upload/' + uid);
+            file.pipe(fstream);
+            fstream.on('close', function () {
+                tweet.attachUID=uid;
+            });
+        });
+        req.busboy.on('finish', function() {
+            db.postTweet(tweet);
+            res.redirect('/');
+        });
     }
 };
