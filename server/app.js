@@ -34,7 +34,7 @@ module.exports = function(sock) {
     app.get('/', function(req, res) {
         if(!!req.user) {
             page ='Привет, ' + (req.user && req.user.username) + '!<br><br>';
-            page+='<a href="/get?user='+req.user.id+'">Мои твиты</a><br>';
+            page+='<a href="/users/'+req.user.id+'/tweets/">Мои твиты</a><br>';
             page+='<a href="/users">Пользователи</a>';
             page+='<form action="/users/'+req.user.id+'/tweets/" enctype="multipart/form-data" method="post">';
             page+='<br>Твит<br><input type="text" name="tweet" maxlength=140><br>';
