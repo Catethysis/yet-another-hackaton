@@ -4,8 +4,8 @@ var db = require('../lib/db'),
     uuid = require('node-uuid');
 
 module.exports = {
-    getTweets: function(req, res) {
-        user_id=req.query.user.split('/')[0];
+    getUserTweets: function(req, res) {
+        user_id=req.params[0];
         db.getUser(user_id, function(err, user)
         {
             page='<a href="/">Глагне</a><br><br>';
@@ -31,7 +31,7 @@ module.exports = {
             cursor.toArray(function(err, arr) {
                 page='<a href="/">Глагне</a><br><ul>';
                 arr.forEach(function(user) {
-                    page+="<li><a href = /get/?user="+user.id+">"+user.profile.displayName+' &mdash; '+user.profile.name.familyName+'&nbsp;'+
+                    page+="<li><a href = /users/"+user.id+"/tweets/>"+user.profile.displayName+' &mdash; '+user.profile.name.familyName+'&nbsp;'+
                         user.profile.name.givenName+'</a></li><br>';
                 });
                 page+='</ul>'
@@ -40,12 +40,12 @@ module.exports = {
         });
     },
 
-    postTweet: function(req, res) {
+    postUserTweet: function(req, res) {
         var tweet={};
         req.pipe(req.busboy);
         req.busboy.on('field', function(key, value) {
             tweet.text=value;
-            tweet.user=req.user.id;
+            tweet.user=req.params[0];//req.user.id;
         });
         req.busboy.on('file', function (fieldname, file, filename) {
             extension=filename.split('.');

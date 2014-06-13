@@ -36,7 +36,7 @@ module.exports = function(sock) {
             page ='Привет, ' + (req.user && req.user.username) + '!<br><br>';
             page+='<a href="/get?user='+req.user.id+'">Мои твиты</a><br>';
             page+='<a href="/users">Пользователи</a>';
-            page+='<form action="/post/" enctype="multipart/form-data" method="post">';
+            page+='<form action="/users/'+req.user.id+'/tweets/" enctype="multipart/form-data" method="post">';
             page+='<br>Твит<br><input type="text" name="tweet" maxlength=140><br>';
             page+='приклеить картинку<br><input type="file" name="приклеить картинку" multiple="multiple"><br>';
             page+='<input type="submit">';
@@ -49,9 +49,11 @@ module.exports = function(sock) {
         res.send(page);
     });
 
-    app.get('/get', db.getTweets);
-    app.post('/post', db.postTweet);
-    app.get('/users', db.getUsers);
+    //app.get('/get', db.getTweets);
+    //app.post('/post', db.postTweet);
+    app.post('/users/*/tweets', db.postUserTweet);
+    app.get( '/users/*/tweets', db.getUserTweets);
+    app.get( '/users', db.getUsers);
 
     app.get('/auth/', passport.authenticate('yandex'), auth.auth);
     app.get('/auth/yandex/callback', passport.authenticate('yandex', { failureRedirect: '/login' }), auth.callback);
