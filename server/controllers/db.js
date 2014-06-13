@@ -13,7 +13,10 @@ module.exports = {
             db.getUserTweets(user_id, function(err, cursor) {
                 cursor.toArray(function(err, arr) {
                     arr.forEach(function(item) {
-                        page+='<li>'+item.content+'</li>';
+                        page+='<li>'+item.content;
+                        if(!!item.attach)
+                            page+='<img src="http://static.twi.dev/'+item.attach+'">';
+                        page+='</li>';
                     })
                     page+='</ul>';
                     res.send(page);
@@ -47,15 +50,16 @@ module.exports = {
         req.busboy.on('file', function (fieldname, file, filename) {
             extension=filename.split('.');
             extension=extension[extension.length-1];
-            uid=uuid.v4()+'.'+extension; //имя файла в хранилище и для базы
-            var fstream = fs.createWriteStream('upload/' + uid);
+            uid=uuid.v4()+'.'+extension; //имя файла в хранилище и для базы — UUID + расширение
+            var fstream = fs.createWriteStream('static/' + uid);
             file.pipe(fstream);
             fstream.on('close', function () {
                 tweet.attachUID=uid;
+                console.log(tweet);
+                db.postTweet(tweet);
             });
         });
         req.busboy.on('finish', function() {
-            db.postTweet(tweet);
             res.redirect('/');
         });
     }
