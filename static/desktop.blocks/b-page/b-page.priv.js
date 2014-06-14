@@ -9,10 +9,10 @@ module.exports = function (blocks) {
                 title: 'Twi',
                 js: true,
                 head: [
-                    { elem: 'css', url: data.stHost + '/desktop.bundles/' + page + '/_' + page + '.css', ie: false },
-                    { elem: 'css', url: data.stHost + '/desktop.bundles/' + page + '/_' + page, ie: true },
+                    { elem: 'css', url: '/desktop.bundles/' + page + '/_' + page + '.css', ie: false },
+                    { elem: 'css', url: '/desktop.bundles/' + page + '/_' + page, ie: true },
                     { elem: 'js', url: '//yastatic.net/jquery/1.8.3/jquery.min.js' },
-                    { elem: 'js', url: data.stHost + '/desktop.bundles/' + page + '/_' + page + '.' + data.language + '.js' },
+                    { elem: 'js', url: '/desktop.bundles/' + page + '/_' + page + '.' + data.language + '.js' },
                     // Это необходимо подключать только тогда, когда у вас используются лайки со счётчиками
                     // { elem: 'js', url: '//yastatic.net/share/cnt.share.js' },
 
@@ -34,7 +34,35 @@ module.exports = function (blocks) {
                 'x-ua-compatible': 'IE=EmulateIE7, IE=edge',
 
                 content: [
-                    'test'
+                    data.user ? [
+                        {
+                            content: [
+                                'Привет ',
+                                data.user.username,
+                                '!'
+                            ]
+                        },
+                        {
+                            tag: 'a',
+                            attrs: {
+                                href: '/get?user='+data.user.id,
+                            },
+                            content: 'мои твиты'
+                        },
+                        {
+                            content: {
+                                tag: 'a',
+                                attrs: {
+                                    href: '/users/'
+                                },
+                                content: 'пользователи'
+                            }
+                        },
+                        '<form action="/post"><input type="text" name="tweet" maxlength=140><br><input type="submit"></form>'
+                    ] : [
+                        'Пожалуйста, войдите в свой <a href="/auth">Яндекс&ndash;аккаунт</a>.<br><br>',
+                        '<a href="/users">Пользователи</a>'
+                    ]
                 ]
             }
         ];
