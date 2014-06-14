@@ -1,7 +1,7 @@
 {
-  "name": "internetometr",
+  "name": "twi",
   "version": "0.0.0",
-  "author": "Egor <escaton@yandex-team.ru>",
+  "author": "Egor <eho31@yandex.ru>",
   "dependencies": {
     "enb": "0.8.48",
     "enb-xjst": "~1.0.0",

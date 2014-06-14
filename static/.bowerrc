@@ -1,4 +1,3 @@
 {
-  "directory": "vendors",
-  "shorthand_resolver": "git://github.yandex-team.ru/{{owner}}/{{package}}.git"
+  "directory": "vendors"
 }
