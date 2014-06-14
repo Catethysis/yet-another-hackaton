@@ -1,0 +1,11 @@
+{
+    "paths" : {
+        "./": "//yastatic.net/internetometr/",
+        "lego/_/": "//yastatic.net/lego/_/"
+    },
+
+    "freeze_paths" : {
+        "./": "_/"
+    }
+}
+

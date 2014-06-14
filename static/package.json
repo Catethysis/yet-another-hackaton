@@ -1,0 +1,16 @@
+{
+  "name": "internetometr",
+  "version": "0.0.0",
+  "author": "Egor <escaton@yandex-team.ru>",
+  "dependencies": {
+    "enb": "0.8.48",
+    "enb-xjst": "~1.0.0",
+    "bower": "~1.2.8",
+    "vow": "= 0.3.12",
+    "vow-fs": "= 0.2.3"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "private": true
+}
