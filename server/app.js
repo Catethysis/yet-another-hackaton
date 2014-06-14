@@ -4,7 +4,8 @@ var express = require('express'),
     db = require('./controllers/db'),
     session = require('express-session'),
     MongoStore = require('connect-mongo')(session),
-    auth = require('./controllers/auth');
+    auth = require('./controllers/auth'),
+    busboy = require('connect-busboy');
 
 var passport = auth.passport;
 
@@ -28,6 +29,7 @@ module.exports = function(sock) {
     }));
     app.use(passport.initialize());
     app.use(passport.session());
+    app.use(busboy());
 
     require('./middleware/express-bemView')(app, {
         templateRoot: path.join(__dirname, '../', 'static'),
@@ -61,14 +63,15 @@ module.exports = function(sock) {
         // res.send(page);
     });
 
-    app.get('/get', db.getTweets);
-    app.get('/post', db.postTweet);
-    app.get('/users', db.getUsers);
+    //app.get('/get', db.getTweets);
+    //app.post('/post', db.postTweet);
+    app.post('/users/*/tweets', db.postUserTweet);
+    app.get( '/users/*/tweets', db.getUserTweets);
+    app.get( '/users', db.getUsers);
 
     app.get('/auth/', passport.authenticate('yandex'), auth.auth);
     app.get('/auth/yandex/callback', passport.authenticate('yandex', { failureRedirect: '/login' }), auth.callback);
 
     app.listen(sock);
     console.log('start listening socket: ', sock);
-
 }
