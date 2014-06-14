@@ -1,5 +1,6 @@
 var express = require('express'),
     app = express(),
+    path = require('path'),
     db = require('./controllers/db'),
     session = require('express-session'),
     MongoStore = require('connect-mongo')(session),
@@ -28,18 +29,36 @@ module.exports = function(sock) {
     app.use(passport.initialize());
     app.use(passport.session());
 
+    require('./middleware/express-bemView')(app, {
+        templateRoot: path.join(__dirname, '../', 'static'),
+        // параметры по умолчанию
+        bundleName: 'desktop',
+        availableBundles: ['desktop'],
+        languageId: 'ru'
+    });
+
     app.get('/', function(req, res) {
-        if(!!req.user) {
-            page='Привет, ' + (req.user && req.user.username) + '!<br><br>';
-            page+='<a href="/get?user='+req.user.id+'">Мои твиты</a><br>';
-            page+='<a href="/users">Пользователи</a>';
-            page+='<form action="/post"><input type="text" name="tweet" maxlength=140><br><input type="submit"></form>'
-        }
-        else {
-            page='Пожалуйста, войдите в свой <a href="/auth">Яндекс&ndash;аккаунт</a>.<br><br>';
-            page+='<a href="/users">Пользователи</a>';
-        }
-        res.send(page);
+
+        res.render('index', {}, function(err, html) {
+
+            if (err) {
+                res.send(500, err);
+            } else {
+                res.send(html);
+            }
+        })
+
+        // if(!!req.user) {
+        //     page='Привет, ' + (req.user && req.user.username) + '!<br><br>';
+        //     page+='<a href="/get?user='+req.user.id+'">Мои твиты</a><br>';
+        //     page+='<a href="/users">Пользователи</a>';
+        //     page+='<form action="/post"><input type="text" name="tweet" maxlength=140><br><input type="submit"></form>'
+        // }
+        // else {
+        //     page='Пожалуйста, войдите в свой <a href="/auth">Яндекс&ndash;аккаунт</a>.<br><br>';
+        //     page+='<a href="/users">Пользователи</a>';
+        // }
+        // res.send(page);
     });
 
     app.get('/get', db.getTweets);
